@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+
+    hii
+    <script>
+        //  result={};
+        async function getData() {
+            temp = await fetch('https://fakestoreapi.com/products');
+            result = await temp.json();
+            console.log(result  )
+
+            result.map(item=>{
+                console.log(item.price)
+            })
+            // console.log();
+        }
+
+        getData();
+
+
+    </script>
+</body>
+</html>
