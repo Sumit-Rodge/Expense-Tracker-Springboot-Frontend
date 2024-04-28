@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie';
 import { useNavigate } from 'react-router';
+import { v4 as uuidv4 } from 'uuid';
+
 
 export const Home = () => {
   const uri = 'http://localhost:8080';
@@ -15,24 +17,29 @@ export const Home = () => {
   const [selectedCategory,setSelectedCategory]=useState(categories[0]);
 
   const cookies = new Cookies();
+  const cookieValue = cookies.get("expense");
+  console.log(cookieValue.id);
 
   const navigate = useNavigate();
   
   async function getData(){
     try {
-      await axios.get(`${uri}/expenses`)
+      // await axios.get(`${uri}/expenses`)
+      
+      await axios.get(`${uri}/get/userexpense/${cookieValue.id}`)
       .then(dataa=>setExpenses(dataa.data));
       console.log(expenses);
     } catch (error) { 
       console.log(error)
-    } 
+    }  
     
 }
 
 
   async function handleAddExpense(id){
     try {
-      await axios.post(`${uri}/add`,{
+      await axios.post(`${uri}/addexpense/${cookieValue.id}`,{
+        "id":uuidv4(),
         "amount":amount,
         "description":description,
         "category":selectedCategory
@@ -50,13 +57,13 @@ export const Home = () => {
     const taskid=e.target.id;
     console.log(e.target.id)
     try {
-      await axios.delete(`${uri}/delete/${taskid}`);
+      await axios.put(`${uri}/deleteexpense/${cookieValue.id}/${taskid}`);
       getData();
       showTaskFailure();
     } catch (error) {
       console.log(error)
     }
-
+ 
   }
 
   // Notifications
@@ -72,7 +79,7 @@ export const Home = () => {
 
   
   useEffect(()=>{
-    if(!cookies.get("expense")){
+    if(!cookies.get("expense")){ 
       navigate('/login')
     };
     getData();
@@ -116,16 +123,16 @@ export const Home = () => {
           <div className="flex flex-col w-full pl-10 items-center pt-6">
           <p className='text-2xl my-2 font-semibold text-gray-300'>You'r Expense</p>
           {
-            Array.isArray(expenses)
+            Array.isArray(expenses.expenses)
             ?
-              expenses.map(expense=>{
+              expenses.expenses.map(expense=>{
                 return(
                   <div className="flex justify-between w-1/2 my-1" key={expense.id}>
                     <div className='w-1/3'>
                       <p className="text-xl capitalize">{ expense.description}</p>
                       <p className='text-xs'>{expense.category  }</p>
                     </div>
-                    <div className='flex items-end'>
+                    <div className='flex items-end'> 
                       <p className='mr-2'>&#8377;{expense.amount } </p>
                       <button onClick={deleteExpense} id={expense.id} className=' text-xl hover:cursor-pointer'>
                       🗑️

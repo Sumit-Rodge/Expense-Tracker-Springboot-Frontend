@@ -49,6 +49,18 @@ export const Register = () => {
                 "password":values.password,
                 "expense":[]
             });
+
+            const user = await axios.get(`${uri}/user/${values.email}`);
+            console.log(user);
+            const userData = user.data;
+            console.log(userData);
+
+            await axios.post(`${uri}/add/userexpense`,{
+              "email":values.email,
+              "id":userData.id,
+              "expenses":[]
+            })
+
             navigate('/login');
         } catch (error) {
             console.log(error);
@@ -124,7 +136,7 @@ export const Register = () => {
                 <Field
                   type="password"
                   name="password"
-                  id="password"
+                  id="password" 
                   className="text-black bg-gray-200 p-2 rounded-lg  font-mono"
                 />
                 <ErrorMessage

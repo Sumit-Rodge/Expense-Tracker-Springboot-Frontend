@@ -35,10 +35,12 @@ export const Login = () => {
       });
 
       const userDetails = data.data;
-      console.log(userDetails);
+      // console.log(userDetails);
 
       if(userDetails.email === values.email && userDetails.password === values.password){
+        console.log(userDetails.id);
         setCookie(userDetails.id);
+        console.log(cookies.get("expense"));
         showLoginSuccess();
         navigate('/');
       }
