@@ -18,7 +18,7 @@ export const Home = () => {
 
   const cookies = new Cookies();
   const cookieValue = cookies.get("expense");
-  console.log(cookieValue.id);
+  // console.log(cookieValue.id);
 
   const navigate = useNavigate();
   
@@ -28,7 +28,7 @@ export const Home = () => {
       
       await axios.get(`${uri}/get/userexpense/${cookieValue.id}`)
       .then(dataa=>setExpenses(dataa.data));
-      console.log(expenses);
+      // console.log(expenses);
     } catch (error) { 
       console.log(error)
     }  
@@ -55,7 +55,7 @@ export const Home = () => {
 
   async function deleteExpense(e){
     const taskid=e.target.id;
-    console.log(e.target.id)
+    // console.log(e.target.id)
     try {
       await axios.put(`${uri}/deleteexpense/${cookieValue.id}/${taskid}`);
       getData();
